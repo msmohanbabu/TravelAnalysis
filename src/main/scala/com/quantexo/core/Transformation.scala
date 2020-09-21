@@ -98,7 +98,7 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   
     def travelTogetherBetweenDates(atleastCount: Int, fromDate: String, toDate: String,all:Boolean=true) = {
 
-    val filterCondition = String.format("date between %s and %s", fromDate, toDate)
+    val filterCondition = String.format("date between \'%s\' and \'%s\'", fromDate, toDate)
     flightDateBDates = flightData.filter(filterCondition)
 
     val travelBetweenDates = flightDateBDates.as("a")
