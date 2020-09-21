@@ -6,15 +6,15 @@ All required parameters\thresholds can be configured in application.conf.
 
 All outputs will be writed in the output path configured in application.conf as stated below
 
- q1Run = "true"
+
  q1Out = "data/output/solution1"
- q2Run = "true"
+ 
  q2Out = "data/output/solution2"
- q3Run = "true"
+  
  q3Out = "data/output/solution3"
- q4Run = "true"
+ 
  q4Out = "data/output/solution4"
- q5Run = "true"
+ 
  q5Out = "data/output/solution5"
 
 
