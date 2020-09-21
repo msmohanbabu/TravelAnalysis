@@ -1,0 +1,15 @@
+[36mDiscovery starting.[0m
+[36mDiscovery completed in 13 seconds, 930 milliseconds.[0m
+[36mRun starting. Expected test count is: 5[0m
+[32mCoreTestCase:[0m
+[32mMonth Aggregation[0m
+[32m- should - Aggregation should be equal to be expected[0m
+[32m- should - Frequent Travellers should be equal to be expected[0m
+[32m- should - Long Transit count should be equal to expected[0m
+[32m- should - Passengers travelled together should be equal to expected[0m
+[32m- should - InvalidCountryException must be thrown[0m
+[36mRun completed in 28 seconds, 841 milliseconds.[0m
+[36mTotal number of tests run: 5[0m
+[36mSuites: completed 2, aborted 0[0m
+[36mTests: succeeded 5, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m
