@@ -28,3 +28,6 @@ All outputs will be writed in the output path configured in application.conf as 
  Q4 and Q5 needs a count on travel together
 
  travelTogetherCount = 3
+ fromDate = "2017-01-01"
+ toDate = "2017-04-01"
+
