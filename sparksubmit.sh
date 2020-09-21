@@ -9,7 +9,7 @@
 ###############################################
 
  spark2-submit --master=yarn \
- --deploy-mode cluster \
+ --deploy-mode client \
  --driver-memory 1g \
  --num-executors 2 \
  --executor-cores 1 \
@@ -17,6 +17,8 @@
  --class com.quantexo.core.ProcessingApp \
  --files "application.conf,log4j.properties" \
  --driver-java-options="-Dconfig.file=application.conf" \
+ --conf spark.driver.extraJavaOptions="-Dconfig.file=application.conf" \
+ --conf spark.executor.extraJavaOptions="-Dconfig.file=application.conf" \
  --conf spark.executor.extraClassPath="-Dconfig.file=application.conf" \
  --conf spark.driver.extraClassPath="-Dconfig.file=application.conf" \
  --conf spark.driver.extraClassPath="-Dlog4j.configuration=log4j.properties" \
