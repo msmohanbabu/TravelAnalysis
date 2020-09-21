@@ -1,7 +1,7 @@
 # TravelAnalysis
 Flight Data Analysis
 
-This job can be submitted using sparksubmit.sh - configured to run in cluster mode.
+This job can be submitted using sparksubmit.sh 
 
 All required parameters\thresholds can be configured in application.conf.
 
