@@ -5,7 +5,7 @@ This job can be submitted using sparksubmit.sh - configured to run in cluster mo
 
 All required parameters\thresholds can be configured in application.conf.
 
-All outputs will be writed in the output path configured in application.conf as stated below
+All outputs will be written to the output path configured in application.conf as stated below
 
 
  q1Out = "data/output/solution1"
