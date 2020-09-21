@@ -5,6 +5,10 @@ import org.apache.spark.sql.functions._
 import scala.beans.BeanProperty
 import org.apache.spark.sql.expressions.Window
 import com.quantexo.utils.JobConfig
+import org.apache.log4j.Logger
+import com.quantexo.utils.InvalidCountryException
+import org.apache.spark.sql.Encoders
+
 
 
 class Transformation(flightData: DataFrame,PassengerData: DataFrame,
@@ -14,6 +18,9 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   @BeanProperty var longTransitCountry: DataFrame = _
   @BeanProperty var flightsTogether: DataFrame = _
   @BeanProperty var flightDateBDates: DataFrame = _
+  
+   @transient val log = Logger.getLogger(getClass.getName)
+
 
   //  var country:String = null
   //  var countTogether:String = null
@@ -31,6 +38,7 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   //    case ex: Exception =>
   //      throw ex
   //  }
+   
 
   def validateCountries = udf { values: collection.mutable.WrappedArray[String] =>
     val indices = values.toList.zip(Stream from 1).filter(_._1 == countryCode).map(_._2)
@@ -68,14 +76,23 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   }
 
   try {
-    longTransitCountry = flightData.sort(col("passengerId"), col("date")).groupBy("passengerId")
-      .agg(collect_list(col("from")).as("countries"))
-      .filter(array_contains(col("countries"), countryCode))
-      .withColumn("count", validateCountries(col("countries"))).filter(col("count") > countryTransitCount)
-      .select(col("passengerId").alias("Passenger ID"), col("count").alias("Longest Run"))
-      .orderBy(col("Passenger ID").asc)
+
+    val countryCodeExist = flightData.select("from").distinct().collect.map(_.getString(0)) contains countryCode
+
+    if (!countryCodeExist)
+      throw new InvalidCountryException(String.format("Country Code \'%s\' does not exist", countryCode))
+    else
+      longTransitCountry = flightData.sort(col("passengerId"), col("date")).groupBy("passengerId")
+        .agg(collect_list(col("from")).as("countries"))
+        .filter(array_contains(col("countries"), countryCode))
+        .withColumn("count", validateCountries(col("countries"))).filter(col("count") > countryTransitCount)
+        .select(col("passengerId").alias("Passenger ID"), col("count").alias("Longest Run"))
+        .orderBy(col("Passenger ID").asc)
 
   } catch {
+    case ex: InvalidCountryException => {
+         ex.printStackTrace()
+         throw ex}
     case ex: Exception =>
       throw ex
   }
@@ -100,18 +117,21 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
 
     val filterCondition = String.format("date between \'%s\' and \'%s\'", fromDate, toDate)
     flightDateBDates = flightData.filter(filterCondition)
+    try {
+      val travelBetweenDates = flightDateBDates.as("a")
+        .join(flightDateBDates.as("b"), (col("a.flightId") === col("b.flightId"))
+          && (col("a.passengerId") <= col("b.passengerId")), "inner")
+        .filter("a.passengerId != b.passengerId")
+        .select(col("a.passengerId").as("Passenger 1 Id"), col("b.passengerId").as("Passenger 2 Id"), col("a.date").as("date"))
+        .withColumn("Number of flights together", count(col("Passenger 1 Id")).over(windowSpec)).distinct
+        .groupBy("Passenger 1 Id", "Passenger 2 Id", "Number of flights together")
+        .agg(min(col("date").cast("date")).alias("From"), max(col("date").cast("date")).alias("To"))
+        .orderBy(col("Number of flights together").desc).filter(col("Number of flights together") > countTogether)
+      travelBetweenDates
+    } catch {
+      case ex: Exception => throw ex
 
-    val travelBetweenDates = flightDateBDates.as("a")
-      .join(flightDateBDates.as("b"), (col("a.flightId") === col("b.flightId"))
-        && (col("a.passengerId") <= col("b.passengerId")), "inner")
-      .filter("a.passengerId != b.passengerId")
-      .select(col("a.passengerId").as("Passenger 1 Id"), col("b.passengerId").as("Passenger 2 Id"),col("a.date").as("date"))
-      .withColumn("Number of flights together", count(col("Passenger 1 Id")).over(windowSpec)).distinct
-      .groupBy("Passenger 1 Id","Passenger 2 Id","Number of flights together")
-      .agg(min(col("date").cast("date")).alias("From"),max(col("date").cast("date")).alias("To"))
-      .orderBy(col("Number of flights together").desc).filter(col("Number of flights together") > countTogether)
-
-    travelBetweenDates
+    }
 
   }
 

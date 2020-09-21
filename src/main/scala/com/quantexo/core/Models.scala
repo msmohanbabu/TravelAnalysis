@@ -6,6 +6,9 @@ import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.catalyst.ScalaReflection
 
+import org.apache.log4j.Logger
+
+
 
 case class Flight(passengerId: Integer, flightId: Integer, from: String, to: String, date: String) 
 

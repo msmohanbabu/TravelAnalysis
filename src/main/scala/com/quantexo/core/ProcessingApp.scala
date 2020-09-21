@@ -2,10 +2,15 @@ package com.quantexo.core
 
 import com.quantexo.utils.JobConfig
 import org.apache.spark.sql.SparkSession
+import org.apache.log4j.Logger
+
 
 object ProcessingApp  {
 
   def main(args: Array[String])  {
+    
+     val log = Logger.getLogger(getClass.getName)
+
 
     try {
       import JobConfig._

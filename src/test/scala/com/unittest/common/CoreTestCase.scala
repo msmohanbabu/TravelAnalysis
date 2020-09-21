@@ -1,12 +1,14 @@
 package com.unittest.common
 
-import org.apache.spark.sql.{AnalysisException, DataFrame, SparkSession}
+import org.apache.spark.sql.{ AnalysisException, DataFrame, SparkSession }
 import com.quantexo.utils.JobConfig
 import com.quantexo.core.Transformation
 import com.quantexo.core.CoreData
 import org.apache.spark.sql.Row
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import com.quantexo.utils.InvalidCountryException
+import com.quantexo.utils.InvalidCountryException
 
 class CoreTestCase extends UnitTest with TestSparkWrapper {
 
@@ -29,9 +31,8 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
     (1, "AAA", "BBB"),
     (2, "XXX", "YYY"),
     (3, "111", "222")).toDF("passId", "firstName", "lastName")
- 
 
-  val transformCase = Transformation(flightCase1, passengerCase1,"AA",0,1)
+  val transformCase = Transformation(flightCase1, passengerCase1, "AA", 0, 1)
 
   behavior of "Month Aggregation"
 
@@ -60,7 +61,7 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
     }
 
   }
-  
+
   it should " - Long Transit count should be equal to expected" in {
 
     val expected = List(Row(2, 2))
@@ -73,8 +74,8 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
     }
 
   }
-  
-   it should " - Passengers travelled together should be equal to expected" in {
+
+  it should " - Passengers travelled together should be equal to expected" in {
 
     val expected = List(Row(2, 3, 1))
 
@@ -86,9 +87,16 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
     }
 
   }
-  
-  
-  
+
+  it should " - InvalidCountryException must be thrown " in {
+
+    val thrown = intercept[InvalidCountryException] {
+      Transformation(flightCase1, passengerCase1, "TT", 0, 1)
+    }
+
+    assert(thrown.getMessage === "Country Code 'TT' does not exist")
+
+  }
 
 }
   
