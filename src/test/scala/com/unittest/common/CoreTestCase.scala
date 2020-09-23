@@ -25,7 +25,8 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
     (3, 500, "EE", "FF", "2019-03-01"),
     (2, 400, "GG", "DD", "2019-04-01"),
     (2, 401, "BB", "DD", "2019-04-02"),
-    (2, 500, "AA", "EE", "2019-05-01")).toDF("passengerId", "flightId", "from", "to", "date")
+    (2, 600, "AA", "EE", "2019-05-01"),
+    (2, 500, "AA", "EE", "2019-03-01")).toDF("passengerId", "flightId", "from", "to", "date")
 
   val passengerCase1 = Seq(
     (1, "AAA", "BBB"),
@@ -38,7 +39,7 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
 
   it should " - Aggregation should be equal to be expected" in {
 
-    val expected = List(Row(1, 1), Row(2, 1), Row(3, 1), Row(4, 2), Row(5, 1))
+    val expected = List(Row(1, 1), Row(2, 1), Row(3, 1), Row(4, 2),Row(5,1))
 
     verifyAggregation(expected)
 
@@ -51,7 +52,7 @@ class CoreTestCase extends UnitTest with TestSparkWrapper {
 
   it should " - Frequent Travellers should be equal to be expected" in {
 
-    val expected = List(Row(2, 4, "XXX", "YYY"), Row(1, 1, "AAA", "BBB"), Row(3, 1, "111", "222"))
+    val expected = List(Row(2, 5, "XXX", "YYY"), Row(1, 1, "AAA", "BBB"), Row(3, 1, "111", "222"))
 
     verifyFrequentTravellers(expected)
 

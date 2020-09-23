@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuite 
-errors="0" failures="0" hostname="msmohan" name="com.unittest.common.CoreTestCase" tests="5" time="14.856" timestamp="2020-09-21T22:56:01">
+errors="0" failures="0" hostname="msmohan" name="com.unittest.common.CoreTestCase" tests="5" time="15.772" timestamp="2020-09-23T11:34:16">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property 
@@ -82,19 +82,19 @@ errors="0" failures="0" hostname="msmohan" name="com.unittest.common.CoreTestCas
     <property name="sun.cpu.isalist" value=""/>
   </properties>
   <testcase 
-  name="Month Aggregation should - Aggregation should be equal to be expected" classname="com.unittest.common.CoreTestCase" time="3.58">
+  name="Month Aggregation should - Aggregation should be equal to be expected" classname="com.unittest.common.CoreTestCase" time="5.88">
 </testcase>
   <testcase 
-  name="Month Aggregation should - Frequent Travellers should be equal to be expected" classname="com.unittest.common.CoreTestCase" time="2.209">
+  name="Month Aggregation should - Frequent Travellers should be equal to be expected" classname="com.unittest.common.CoreTestCase" time="1.869">
 </testcase>
   <testcase 
-  name="Month Aggregation should - Long Transit count should be equal to expected" classname="com.unittest.common.CoreTestCase" time="2.62">
+  name="Month Aggregation should - Long Transit count should be equal to expected" classname="com.unittest.common.CoreTestCase" time="2.2">
 </testcase>
   <testcase 
-  name="Month Aggregation should - Passengers travelled together should be equal to expected" classname="com.unittest.common.CoreTestCase" time="5.195">
+  name="Month Aggregation should - Passengers travelled together should be equal to expected" classname="com.unittest.common.CoreTestCase" time="4.647">
 </testcase>
   <testcase 
-  name="Month Aggregation should - InvalidCountryException must be thrown" classname="com.unittest.common.CoreTestCase" time="1.171">
+  name="Month Aggregation should - InvalidCountryException must be thrown" classname="com.unittest.common.CoreTestCase" time="1.078">
 </testcase>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

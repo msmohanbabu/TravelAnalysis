@@ -53,8 +53,9 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   }
 
   try {
-    aggForMonth = flightData.withColumn("Month", col("date").substr(6, 2).cast("int"))
-      .groupBy("Month").agg(count("passengerId").alias("Number of Flights"))
+    aggForMonth = flightData.withColumn("YearMonth", col("date").substr(1, 7)).select("flightId","YearMonth").distinct
+      .groupBy("YearMonth").agg(count("flightId").alias("Number of Flights"))
+      .withColumn("Month", col("YearMonth").substr(6,2).cast("int")).select("Month","Number of Flights")
       .orderBy(col("Month").asc)
 
   } catch {
@@ -101,7 +102,7 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
   try {
 
     flightsTogether = flightData.as("a")
-      .join(flightData.as("b"), (col("a.flightId") === col("b.flightId"))
+      .join(flightData.as("b"), (col("a.flightId") === col("b.flightId")) && (col("a.date") === col("b.date"))
         && (col("a.passengerId") <= col("b.passengerId")), "inner")
       .filter("a.passengerId != b.passengerId")
       .select(col("a.passengerId").as("Passenger 1 Id"), col("b.passengerId").as("Passenger 2 Id"))
@@ -119,7 +120,7 @@ class Transformation(flightData: DataFrame,PassengerData: DataFrame,
     flightDateBDates = flightData.filter(filterCondition)
     try {
       val travelBetweenDates = flightDateBDates.as("a")
-        .join(flightDateBDates.as("b"), (col("a.flightId") === col("b.flightId"))
+        .join(flightDateBDates.as("b"), (col("a.flightId") === col("b.flightId")) && (col("a.date") === col("b.date"))
           && (col("a.passengerId") <= col("b.passengerId")), "inner")
         .filter("a.passengerId != b.passengerId")
         .select(col("a.passengerId").as("Passenger 1 Id"), col("b.passengerId").as("Passenger 2 Id"), col("a.date").as("date"))
